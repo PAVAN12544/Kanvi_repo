@@ -25,7 +25,7 @@ pipeline {
 			steps {
 				script {
 						try {
-								bat 'docker rmi toufiks/stockapp'
+								bat 'docker rmi pavandande/stockapp'
 							} catch (err) {
 								echo "No existing image found, continuing to next stage."
 							}
@@ -35,8 +35,8 @@ pipeline {
 		stage('Docker') {
 			steps {
 				dir("StockPricesApp") {
-					bat 'docker build -t toufiks/stockapp .'	
-					bat 'docker run -d -p 9999:9090 --name stockapp_container toufiks/stockapp'
+					bat 'docker build -t pavandande/stockapp .'	
+					bat 'docker run -d -p 9999:9090 --name stockapp_container pavandande/stockapp'
 				}
 			}
 		}
