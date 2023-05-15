@@ -1,0 +1,46 @@
+pipeline {
+	agent any
+	stages {
+		stage('Install stage') {
+			steps {
+				dir("StockPricesApp") {
+					bat 'mvn clean install'
+				}
+			}
+		}
+		stage('Stop Docker Container') {
+			steps {
+				script {
+						try {
+								bat 'docker stop stockapp_container'
+								bat 'docker rm stockapp_container'
+							} catch (err) {
+								echo "No running container found, continuing to next stage."
+							}
+						}
+				}
+		}
+
+		stage('Delete Docker Image') {
+			steps {
+				script {
+						try {
+								bat 'docker rmi toufiks/stockapp'
+							} catch (err) {
+								echo "No existing image found, continuing to next stage."
+							}
+				}
+			}
+		}
+		stage('Docker') {
+			steps {
+				dir("StockPricesApp") {
+					bat 'docker build -t toufiks/stockapp .'	
+					bat 'docker run -d -p 9999:9090 --name stockapp_container toufiks/stockapp'
+				}
+			}
+		}
+
+		
+	}
+}
