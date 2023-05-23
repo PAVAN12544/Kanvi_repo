@@ -1,15 +1,18 @@
 version: 0.2
 
 phases:
+  install:
+    runtime-versions:
+      docker: latest
   build:
     commands:
-      - echo Entered the build phase...
-      - cd StockPricesApp 
+      - echo Building the Spring Boot application...
+      - cd StockPricesApp
       - mvn clean package
+      - echo Building the Docker image...
+      - docker build -t pavandande/stockapp:latest .
   post_build:
     commands:
-      - echo Build completed successfully
-artifacts:
-  files:
-    - StockPricesApp/target/StockPricesApp-0.0.1-SNAPSHOT.jar
-  discard-paths: yes
+      - echo Pushing the Docker image to Docker Hub...
+      - docker login -u pavandande -p Pavan@125
+      - docker push pavandande/stockapp:latest
