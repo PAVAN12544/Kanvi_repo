@@ -11,8 +11,10 @@ phases:
       - mvn clean package
       - echo Building the Docker image...
       - docker build -t pavandande/stockapp:latest .
+      
   post_build:
     commands:
       - echo Pushing the Docker image to Docker Hub...
       - docker login -u pavandande -p Pavan@125
       - docker push pavandande/stockapp:latest
+      # docker push
